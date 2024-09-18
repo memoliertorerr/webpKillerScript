@@ -2,18 +2,20 @@ export PATH="/usr/local/bin:$PATH"
 #!/bin/bash
 
 # Directory to watch for file changes
-WATCHED_DIR="/Users/memoli/Storage/Donanimhaber"
+WATCHED_DIR="/path/to/your/directory"
 
 # Full HD resolution for comparison
 MAX_WIDTH=1920
 MAX_HEIGHT=1080
 
-# Full path to fswatch
+# This part is not necessary but I have left it for future daemon tasks
+# Full path to fswatch (I've installed it via homebrew)
 FSWATCH_PATH="/opt/homebrew/bin/fswatch"  # Update this path
 
 # Function to process images
 process_image() {
   local file="$1"
+  # Base name and extensions should be defined prior to the deletion of file
   local base_name="${file%.*}"
   local ext="${file##*.}"
 
@@ -24,6 +26,7 @@ process_image() {
   fi
 
   # Check if the file is the horrendous image format webp, convert to jpg (I actually know that webp is a great format but no one uses it properly so...)
+  # avif file was also added because I ran into some issues before
   if [[ "$ext" == "webp" || "$ext" == "avif" ]]; then
     echo "Converting $file to JPEGMAFIA"
     magick "$file" "${base_name}.jpeg" && rm "$file"
